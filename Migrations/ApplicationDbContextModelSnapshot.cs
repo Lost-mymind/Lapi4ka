@@ -22,6 +22,105 @@ namespace Lapi4ka.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Lapi4ka.Data.Entitys.Adoption", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AdopterId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AnimalId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EmployeeId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Messege")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdopterId");
+
+                    b.HasIndex("AnimalId");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("Adoptions");
+                });
+
+            modelBuilder.Entity("Lapi4ka.Data.Entitys.Animal", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Breed")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Sex")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TypeId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TypeId");
+
+                    b.ToTable("Animals");
+                });
+
+            modelBuilder.Entity("Lapi4ka.Data.Entitys.AnimalType", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AnimalTypes");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -247,6 +346,44 @@ namespace Lapi4ka.Migrations
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
 
+            modelBuilder.Entity("Lapi4ka.Data.Entitys.Adoption", b =>
+                {
+                    b.HasOne("Lapi4ka.Data.Entitys.ApplicationUser", "Adopter")
+                        .WithMany("AdoptionRequests")
+                        .HasForeignKey("AdopterId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Lapi4ka.Data.Entitys.Animal", "Animal")
+                        .WithMany("AdoptionRequests")
+                        .HasForeignKey("AnimalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Lapi4ka.Data.Entitys.ApplicationUser", "Employee")
+                        .WithMany("ProcessedRequests")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Adopter");
+
+                    b.Navigation("Animal");
+
+                    b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("Lapi4ka.Data.Entitys.Animal", b =>
+                {
+                    b.HasOne("Lapi4ka.Data.Entitys.AnimalType", "AnimalType")
+                        .WithMany("Animals")
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AnimalType");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -296,6 +433,23 @@ namespace Lapi4ka.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Lapi4ka.Data.Entitys.Animal", b =>
+                {
+                    b.Navigation("AdoptionRequests");
+                });
+
+            modelBuilder.Entity("Lapi4ka.Data.Entitys.AnimalType", b =>
+                {
+                    b.Navigation("Animals");
+                });
+
+            modelBuilder.Entity("Lapi4ka.Data.Entitys.ApplicationUser", b =>
+                {
+                    b.Navigation("AdoptionRequests");
+
+                    b.Navigation("ProcessedRequests");
                 });
 #pragma warning restore 612, 618
         }

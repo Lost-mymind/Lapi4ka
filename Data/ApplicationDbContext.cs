@@ -9,5 +9,35 @@ namespace Lapi4ka.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
         public DbSet<ApplicationUser> Users { get; set; }
+        public DbSet<Adoption> Adoptions { get; set; }
+        public DbSet<Animal> Animals { get; set; }
+        public DbSet<AnimalType> AnimalTypes { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Animal>()
+            .HasOne(s => s.AnimalType)            
+            .WithMany(t => t.Animals)          
+            .HasForeignKey(s => s.TypeId);
+
+            modelBuilder.Entity<Adoption>()
+            .HasOne(s => s.Animal)
+            .WithMany(t => t.AdoptionRequests)
+            .HasForeignKey(s => s.AnimalId);
+
+            modelBuilder.Entity<Adoption>()
+            .HasOne(s => s.Adopter)
+            .WithMany(t => t.AdoptionRequests)
+            .HasForeignKey(s => s.AdopterId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Adoption>()
+            .HasOne(s => s.Employee)
+            .WithMany(t => t.ProcessedRequests)
+            .HasForeignKey(s => s.EmployeeId)                 
+            .OnDelete(DeleteBehavior.Restrict);
+
+
+        }
     }
 }
