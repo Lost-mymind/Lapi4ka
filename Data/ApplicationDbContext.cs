@@ -12,6 +12,9 @@ namespace Lapi4ka.Data
         public DbSet<Adoption> Adoptions { get; set; }
         public DbSet<Animal> Animals { get; set; }
         public DbSet<AnimalType> AnimalTypes { get; set; }
+        public DbSet<VetProcedure> VetProcedures { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<Application> Applications { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -37,7 +40,17 @@ namespace Lapi4ka.Data
             .HasForeignKey(s => s.EmployeeId)                 
             .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<VetProcedure>()
+            .HasOne(s => s.Animal)
+            .WithMany(t => t.Procedures)
+            .HasForeignKey(s => s.AnimalId)
+            .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<Application>()
+            .HasOne(s => s.User)
+            .WithMany(t => t.Applications)
+            .HasForeignKey(s => s.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

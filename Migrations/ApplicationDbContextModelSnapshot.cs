@@ -121,6 +121,86 @@ namespace Lapi4ka.Migrations
                     b.ToTable("AnimalTypes");
                 });
 
+            modelBuilder.Entity("Lapi4ka.Data.Entitys.Application", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Activity")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("FridayFree")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("MondayFree")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("RequestedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("SaturdayFree")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("SundayFree")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ThursdayFree")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("TuesdayFree")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("WednesdayFree")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Applications");
+                });
+
+            modelBuilder.Entity("Lapi4ka.Data.Entitys.VetProcedure", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AnimalId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("ExecutedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Note")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProcedureType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("VetName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AnimalId");
+
+                    b.ToTable("VetProcedures");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -384,6 +464,28 @@ namespace Lapi4ka.Migrations
                     b.Navigation("AnimalType");
                 });
 
+            modelBuilder.Entity("Lapi4ka.Data.Entitys.Application", b =>
+                {
+                    b.HasOne("Lapi4ka.Data.Entitys.ApplicationUser", "User")
+                        .WithMany("Applications")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Lapi4ka.Data.Entitys.VetProcedure", b =>
+                {
+                    b.HasOne("Lapi4ka.Data.Entitys.Animal", "Animal")
+                        .WithMany("Procedures")
+                        .HasForeignKey("AnimalId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Animal");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -438,6 +540,8 @@ namespace Lapi4ka.Migrations
             modelBuilder.Entity("Lapi4ka.Data.Entitys.Animal", b =>
                 {
                     b.Navigation("AdoptionRequests");
+
+                    b.Navigation("Procedures");
                 });
 
             modelBuilder.Entity("Lapi4ka.Data.Entitys.AnimalType", b =>
@@ -448,6 +552,8 @@ namespace Lapi4ka.Migrations
             modelBuilder.Entity("Lapi4ka.Data.Entitys.ApplicationUser", b =>
                 {
                     b.Navigation("AdoptionRequests");
+
+                    b.Navigation("Applications");
 
                     b.Navigation("ProcessedRequests");
                 });

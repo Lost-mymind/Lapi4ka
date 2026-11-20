@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Lapi4ka.Data.Constants;
+using Microsoft.AspNetCore.Identity;
 
 namespace Lapi4ka.Data.Entitys
 {
@@ -9,5 +10,6 @@ namespace Lapi4ka.Data.Entitys
         public DateTime RegistrationDate { get; set; }
         public ICollection<Adoption> AdoptionRequests { get; set; }
         public ICollection<Adoption> ProcessedRequests { get; set; }
+        public ICollection<Application> Applications { get; set; }
     }
 }

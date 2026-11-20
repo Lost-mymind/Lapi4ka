@@ -5,6 +5,10 @@ namespace Lapi4ka.Data.Entitys
 {
     public class Animal
     {
+        public Animal()
+        {
+            Id = Guid.NewGuid().ToString();
+        }
         public string Id { get; set; }
         public string TypeId { get; set; }
         public string Name { get; set; }
@@ -17,6 +21,7 @@ namespace Lapi4ka.Data.Entitys
         public bool IsDeleted { get; set; }
         public ICollection<Adoption> AdoptionRequests { get; set; }
         public AnimalType AnimalType { get; set; }
+        public ICollection<VetProcedure> Procedures { get; set; }
 
     }
 }
