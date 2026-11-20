@@ -1,4 +1,6 @@
-﻿namespace Lapi4ka.Data.Entitys
+﻿using Lapi4ka.Data.Constants;
+
+namespace Lapi4ka.Data.Entitys
 {
     public class Adoption
     {
@@ -7,7 +9,7 @@
         public string EmployeeId { get; set; }
         public string AnimalId { get; set; }
         public string Messege { get; set; }
-        public int Status { get; set; }
+        public AdoptionStatus Status { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime ModifiedAt { get; set; }
         public Animal Animal { get; set; }
